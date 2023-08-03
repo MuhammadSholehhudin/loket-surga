@@ -3,6 +3,7 @@ import Home from "./components/page/home";
 import Tentang from "./components/page/tentang";
 import Artikel from "./components/page/artikel";
 import Donasi from "./components/page/donasi";
+import "./App.css";
 import {
   linkArtikel,
   linkBeranda,

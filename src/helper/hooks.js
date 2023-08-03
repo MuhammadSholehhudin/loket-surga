@@ -4,7 +4,7 @@ export async function fetchAPI(url, method, requestData) {
   try {
     const { data } = await axios({
       method: method || "get",
-      baseURL: "http://localhost:1337/api",
+      baseURL: import.meta.env.VITE_MY_ENDPOINT,
       url: url,
       data: requestData,
       headers: {

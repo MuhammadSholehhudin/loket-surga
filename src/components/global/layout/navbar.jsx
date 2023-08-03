@@ -15,10 +15,10 @@ export default function Navbar() {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg bg-info">
+      <nav className="navbar navbar-expand-lg bg-info fixed-top">
         <div className="container">
-          <a className="navbar-brand" href="#">
-            Logo
+          <a className="navbar-brand text-white" href={linkBeranda}>
+            <h5>Loket Surga</h5>
           </a>
           <button
             className="navbar-toggler"
@@ -55,7 +55,10 @@ export default function Navbar() {
               className="nav-link"
               style={{ marginLeft: "20px" }}
             >
-              <button className="btn" style={{ backgroundColor: "#F8FDCF" }}>
+              <button
+                className="btn text-info bg-light"
+                style={{ fontWeight: "Bold" }}
+              >
                 Donasi
               </button>
             </Link>

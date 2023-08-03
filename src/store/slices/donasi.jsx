@@ -5,6 +5,7 @@ export const donasiSlices = createSlice({
   initialState: {
     selectedNominal: null,
     selectedMetode: null,
+    selectedSedekahCategories: null,
   },
   reducers: {
     setNominal(state, { payload }) {
@@ -13,8 +14,12 @@ export const donasiSlices = createSlice({
     setMetodePembayaran(state, { payload }) {
       state.selectedMetode = payload;
     },
+    setCategorySedekah(state, { payload }) {
+      state.selectedSedekahCategories = payload;
+    },
   },
 });
 
-export const { setNominal, setMetodePembayaran } = donasiSlices.actions;
+export const { setNominal, setMetodePembayaran, setCategorySedekah } =
+  donasiSlices.actions;
 export default donasiSlices.reducer;

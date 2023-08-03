@@ -1,5 +1,5 @@
 import Layout from "../../global/layout";
-import FormDonasi from "./form-donasi";
+import FormDonasi from "./formDonasi";
 
 export default function Donasi() {
   return (

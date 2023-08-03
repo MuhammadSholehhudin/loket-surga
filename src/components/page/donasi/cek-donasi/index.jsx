@@ -1,13 +1,17 @@
 import { useState } from "react";
 import Layout from "../../../global/layout";
-import "./cek-donasi.css";
+import "./cekDonasi.css";
 import { formatNumber } from "../../../../helper/utils";
 import { fetchAPI } from "../../../../helper/hooks";
 import { ToastContainer, toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { linkPembayaran } from "../../../../helper/constant";
+import { linkBeranda, linkPembayaran } from "../../../../helper/constant";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import sedekahJumat from "../../../../assets/img/thumbnail/sedekahJumat.jpg";
 import {
+  setCategorySedekah,
   setMetodePembayaran,
   setNominal,
 } from "../../../../store/slices/donasi";
@@ -25,6 +29,9 @@ export default function CekDonasi() {
 
   const selectedNominal = useSelector((state) => state.donasi.selectedNominal);
   const selectedMetode = useSelector((state) => state.donasi.selectedMetode);
+  const selectedSedekahCategories = useSelector(
+    (state) => state.donasi.selectedSedekahCategories
+  );
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -42,6 +49,15 @@ export default function CekDonasi() {
       data: {
         username: formData.nama,
         donation: selectedNominal,
+        email: formData.email,
+        phone: formData.noHandphone,
+        doa: formData.doa,
+        donation_category: {
+          id: selectedSedekahCategories.id,
+          attributes: {
+            category: selectedSedekahCategories.title,
+          },
+        },
       },
     };
 
@@ -61,6 +77,7 @@ export default function CekDonasi() {
     formDataSet(dataAwal);
     dispatch(setNominal(""));
     dispatch(setMetodePembayaran(""));
+    dispatch(setCategorySedekah(""));
   };
 
   const navigate = useNavigate();
@@ -74,6 +91,10 @@ export default function CekDonasi() {
     const inputNomnial = e.target.value.replace(/\D/g, "");
     dispatch(setNominal(inputNomnial));
   };
+
+  const handleCategory = () => {
+    navigate(linkBeranda);
+  };
   return (
     <Layout>
       <div className="container d-flex flex-column align-items-center py-5">
@@ -82,8 +103,54 @@ export default function CekDonasi() {
           onSubmit={handelSubmit}
         >
           <div className="p-4 card-container">
+            <div
+              className="card-cek p-4 mb-4"
+              onClick={handleCategory}
+              style={{ cursor: "pointer" }}
+            >
+              {selectedSedekahCategories !== null ? (
+                <div className="d-flex gap-4">
+                  <img
+                    src={`http://192.168.15.62:1337${selectedSedekahCategories.attributes.pictures.data.attributes.url}`}
+                    style={{ width: "100%", maxWidth: "30%", borderRadius: 5 }}
+                  />
+                  <div className="mt-3">
+                    <p>Anda akan bersedekah untuk :</p>
+                    <h5> {selectedSedekahCategories.attributes.category}</h5>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    style={{
+                      fontSize: "1.5rem",
+                      alignSelf: "center",
+                      marginLeft: "auto",
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="d-flex gap-4" onClick={handleCategory}>
+                  <img
+                    src={sedekahJumat}
+                    style={{ width: "100%", maxWidth: "30%", borderRadius: 5 }}
+                  />
+                  <div className="mt-3">
+                    <p>Anda akan bersedekah :</p>
+                    <h5>Sedekah Jumat</h5>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faAngleRight}
+                    style={{
+                      fontSize: "1.5rem",
+                      alignSelf: "center",
+                      marginLeft: "auto",
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+
             <div className="form-group card-cek p-4">
-              <label className="sr-only">Nominal Donasi </label>
+              <label>Nominal Donasi Anda </label>
               <div className="input-group mt-3">
                 <div className="input-group-prepend">
                   <div className="input-group-text">Rp. </div>

@@ -31,6 +31,7 @@ export default function CardDonations({ data }) {
                 Rp. {formatNumber(item.attributes.donation)}
               </span>
             </p>
+            <p className="doa">{'"' + item.attributes.doa + '" '}</p>
           </div>
         </div>
       ))}

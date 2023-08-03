@@ -60,7 +60,10 @@ export default function Pembayaran() {
 
   return (
     <Layout>
-      <div className="container d-flex flex-column align-items-center justify-content-center py-5">
+      <div
+        className="container d-flex flex-column align-items-center justify-content-center"
+        style={{ minHeight: "100vh" }}
+      >
         {ewallet.map((item) => (
           <div
             key={item.id}
