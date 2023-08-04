@@ -23,10 +23,6 @@ export default function CardSedekah({ data }) {
           />
           <div className="card-body d-flex flex-column align-items-center">
             <h5 className="card-title">{item.attributes.category}</h5>
-            <p className="card-text text-center">
-              Some quick example text to build on the card title and make up the
-              bulk of the content.
-            </p>
             <button
               className="btn btn-info text-light"
               style={{ width: "100%", maxWidth: "90%" }}

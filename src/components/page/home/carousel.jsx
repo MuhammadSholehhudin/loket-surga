@@ -1,4 +1,4 @@
-import { Carousel } from "react-bootstrap"; // Import the Carousel component from react-bootstrap
+import { Carousel } from "react-bootstrap";
 import sedekahJumat from "../../../assets/img/thumbnail/sedekahJumat.png";
 import sedekahJumatt from "../../../assets/img/thumbnail/sedekahJumat2.png";
 import sedekahSubuh from "../../../assets/img/thumbnail/sedekah subuh2.png";

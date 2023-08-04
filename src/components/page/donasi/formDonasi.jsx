@@ -44,7 +44,7 @@ export default function FormDonasi() {
   };
 
   const handleInputChange = (e) => {
-    const inputNominal = e.target.value;
+    const inputNominal = e.target.value.replace(/\D/g, "");
     dispatch(setNominal(inputNominal));
   };
 
@@ -93,6 +93,14 @@ export default function FormDonasi() {
               <p>Anda akan bersedekah :</p>
               <h5>Sedekah Jumat</h5>
             </div>
+            <FontAwesomeIcon
+              icon={faAngleRight}
+              style={{
+                fontSize: "1.5rem",
+                alignSelf: "center",
+                marginLeft: "auto",
+              }}
+            />
           </div>
         )}
       </div>
@@ -115,10 +123,12 @@ export default function FormDonasi() {
               <div className="input-group-text">Rp. </div>
             </div>
             <input
-              type="number"
+              type="text"
               name="nominal"
               className="form-control"
-              value={selectedNominal !== null ? selectedNominal : ""}
+              value={
+                selectedNominal !== null ? formatNumber(selectedNominal) : ""
+              }
               onChange={handleInputChange}
             />
           </div>

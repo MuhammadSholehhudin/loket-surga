@@ -26,6 +26,8 @@ export default function CekDonasi() {
   };
 
   const [formData, formDataSet] = useState(dataAwal);
+  const [errMsg, setErrMsg] = useState("");
+  const regex = /^[A-Za-z ]*$/;
 
   const selectedNominal = useSelector((state) => state.donasi.selectedNominal);
   const selectedMetode = useSelector((state) => state.donasi.selectedMetode);
@@ -36,6 +38,15 @@ export default function CekDonasi() {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
+
+    if (name === "nama") {
+      if (regex.test(value)) {
+        setErrMsg("");
+      } else {
+        setErrMsg("Nama Harus Berupa Huruf !");
+      }
+    }
+
     formDataSet((prev) => ({
       ...prev,
       [name]: name === "nominal" ? selectedNominal : value,
@@ -45,39 +56,47 @@ export default function CekDonasi() {
   const handelSubmit = async (e) => {
     e.preventDefault();
 
-    const requestData = {
-      data: {
-        username: formData.nama,
-        donation: selectedNominal,
-        email: formData.email,
-        phone: formData.noHandphone,
-        doa: formData.doa,
-        donation_category: {
-          id: selectedSedekahCategories.id,
-          attributes: {
-            category: selectedSedekahCategories.title,
+    if (errMsg !== "") {
+      alert("Nama tidak boleh mengandung Angka !");
+    } else {
+      const requestData = {
+        data: {
+          username: formData.nama,
+          donation: selectedNominal,
+          email: formData.email,
+          phone: formData.noHandphone,
+          doa: formData.doa,
+          donation_category: {
+            id: selectedSedekahCategories.id,
+            attributes: {
+              category: selectedSedekahCategories.title,
+            },
           },
         },
-      },
-    };
+      };
 
-    try {
-      const response = await fetchAPI("/donations", "POST", requestData);
+      try {
+        const response = await fetchAPI(
+          "/donations?populate=*",
+          "POST",
+          requestData
+        );
 
-      console.log("Response from API", response);
+        console.log("Response from API", response);
 
-      toast.success("Data has been successfully added!", {
-        position: toast.POSITION.TOP_RIGHT,
-        autoClose: 2000, // Time in milliseconds the notification should be visible
-      });
-    } catch (error) {
-      console.log("error => ", error);
+        toast.success("Data has been successfully added!", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 2000,
+        });
+      } catch (error) {
+        console.log("error => ", error);
+      }
+
+      formDataSet(dataAwal);
+      dispatch(setNominal(""));
+      dispatch(setMetodePembayaran(""));
+      dispatch(setCategorySedekah(""));
     }
-
-    formDataSet(dataAwal);
-    dispatch(setNominal(""));
-    dispatch(setMetodePembayaran(""));
-    dispatch(setCategorySedekah(""));
   };
 
   const navigate = useNavigate();
@@ -108,7 +127,8 @@ export default function CekDonasi() {
               onClick={handleCategory}
               style={{ cursor: "pointer" }}
             >
-              {selectedSedekahCategories !== null ? (
+              {selectedSedekahCategories &&
+              selectedSedekahCategories.attributes ? (
                 <div className="d-flex gap-4">
                   <img
                     src={`http://192.168.15.62:1337${selectedSedekahCategories.attributes.pictures.data.attributes.url}`}
@@ -199,6 +219,7 @@ export default function CekDonasi() {
                 required
               />
               <hr style={{ marginTop: "-1px", width: "100%" }} />
+              {errMsg && <span style={{ color: "red" }}> {errMsg}</span>}
             </div>
             <div className="form-group mt-5">
               <label>

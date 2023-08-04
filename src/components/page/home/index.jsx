@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { fetchAPI } from "../../../helper/hooks";
 import Layout from "../../global/layout";
 import CardDonations from "./cardDonasi";
-import Carousel from "./carousel";
+import CarouselHero from "./carousel";
 import CardSedekah from "./CardSedekah";
 import CardProgramLain from "./cardProgramLainnya";
+import { Carousel } from "react-responsive-carousel";
+import Artikel from "../artikel";
+import CardArtikel from "./cardArtikel";
 
 export default function Home() {
   const [donations, setDonations] = useState([]);
@@ -12,6 +15,7 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [program, setProgram] = useState([]);
+  const [article, setArticle] = useState([]);
 
   async function fetchDonations() {
     try {
@@ -46,10 +50,22 @@ export default function Home() {
     }
   }
 
+  async function fetchArticle() {
+    try {
+      const { data } = await fetchAPI("/articles?populate=*");
+      setArticle(data);
+      setLoading(false);
+    } catch (error) {
+      setError("Gagal Mengambil data Article");
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchDonations();
     fetchCategories();
     fetchProgram();
+    fetchArticle();
   }, []);
 
   return (
@@ -58,7 +74,7 @@ export default function Home() {
         className="container m-auto"
         style={{ position: "relative", zIndex: "1" }}
       >
-        <Carousel />
+        <CarouselHero />
       </section>
 
       <section
@@ -108,14 +124,13 @@ export default function Home() {
 
       <section
         className="container-fluid mb-5"
-        style={{ width: "100%", backgroundColor: "#f6f6f6", padding: "20px" }}
+        style={{ width: "100%", padding: "20px" }}
       >
         <h3 className="text-center mb-5">Program Bantuan Lainnya</h3>
         <div
           className="d-flex gap-3 justify-content-center mb-5"
           style={{
             width: "100%",
-            backgroundColor: "#f6f6f6",
             padding: "20px",
             display: "flex",
             flexWrap: "wrap",
@@ -134,7 +149,36 @@ export default function Home() {
         </div>
       </section>
 
-      <section></section>
+      <section
+        className="container-fluid mb-5"
+        style={{ width: "100%", backgroundColor: "#f6f6f6", padding: "20px" }}
+      >
+        <div className="text-center mb-5">
+          <h3>Keutamaan dari Sedekah</h3>
+          <p>Baca dan pelajari keutamaan dari sedekah</p>
+        </div>
+        <div
+          className="d-flex gap-3 justify-content-center mb-5"
+          style={{
+            width: "100%",
+            padding: "20px",
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "50px",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          {loading ? (
+            <p>Loading...</p>
+          ) : categories.length > 0 ? (
+            // <CardProgramLain data={program} />
+            <CardArtikel data={article} />
+          ) : (
+            <p>Data Tidak di temukan !</p>
+          )}
+        </div>
+      </section>
 
       <div className="text-center mb-5">
         <h3>Donasi</h3>
